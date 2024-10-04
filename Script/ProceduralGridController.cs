@@ -130,10 +130,35 @@ public class ProceduralGridController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        // TODO: WORK THIS MATH OUT FOR OTHER 2 PLANES
         // Draw the grid outline when selected
         Gizmos.DrawLine(transform.position, transform.position + transform.right * ((GridSize.x-1) * (_cellSize*10 + _cellPadding)));
         Gizmos.DrawLine(transform.position + transform.right * ((GridSize.x-1) * (_cellSize*10 + _cellPadding)), (transform.position + transform.right * ((GridSize.x-1) * (_cellSize*10 + _cellPadding))) + transform.forward * ((GridSize.y-1) * (_cellSize*10 + _cellPadding)));
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * ((GridSize.y-1) * (_cellSize*10 + _cellPadding)));
         Gizmos.DrawLine(transform.position + transform.forward * ((GridSize.y-1) * (_cellSize*10 + _cellPadding)), transform.position + transform.forward * ((GridSize.y-1) * (_cellSize*10 + _cellPadding)) + transform.right * ((GridSize.x-1) * (_cellSize*10 + _cellPadding)));
+    }
+    
+    /// <summary>
+    /// Take a cell start and end point and will return a list of points along a line on the grid
+    /// </summary>
+    /// <param name="p0">initial point</param>
+    /// <param name="p1">end point</param>
+    /// <param name="points">list of points from start to finish along the line inc. p0 and p1</param>
+    public void DrawLine(Vector2 p0, Vector2 p1, ref List<Vector2> points) {
+        
+        points.Clear();
+        
+        Vector2 p;
+        float dx = p1.x - p0.x;
+        float dy = p1.y - p0.y;
+        float N = Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy));
+        float divN = (N == 0)? 0.0f : 1.0f / N;
+        float xstep = dx * divN;
+        float ystep = dy * divN;
+        float x = p0.x, y = p0.y;
+        for (int step = 0; step <= N; step++, x += xstep, y += ystep) {
+            p = new Vector2(Mathf.Round(x), Mathf.Round(y));
+            points.Add(p);
+        }
     }
 }
