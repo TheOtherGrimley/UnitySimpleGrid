@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ProceduralGridController : MonoBehaviour
 {
+    public enum GridDirection { xy, xz, yz}
     [SerializeField] private GameObject CellPrefab;
     [SerializeField] private GameObject LinesPrefab;
     
@@ -15,6 +16,7 @@ public class ProceduralGridController : MonoBehaviour
     [SerializeField] private float _cellPadding = 0.1f;
 
     [SerializeField] private Vector2 GridSize;
+    [SerializeField] private GridDirection _gridDirection;
 
     [SerializeField] private bool _initialiseOnPlay;
 
@@ -49,17 +51,34 @@ public class ProceduralGridController : MonoBehaviour
                 float w = _cellSize*10;
                 float p = _cellPadding;
                 float d = w + p;
-                Vector3 offset = new Vector3((x * d), 0f, (y * d));
-                GameObject CellPlane = Instantiate(CellPrefab, this.transform.position + offset,
+                Vector3 offset = Vector3.zero;
+                offset= new Vector3((x * d), 0f, (y * d));
+                
+                GameObject CellPlane = Instantiate(CellPrefab, this.transform.position,
                     Quaternion.identity, transform);
                 Cell t_cell = CellPlane.GetComponent<Cell>();
                 
                 t_cell.CellPlane = CellPlane;
                 t_cell.CellPlane.transform.localScale = new Vector3(_cellSize, 1f, _cellSize);
+                t_cell.CellPlane.transform.localPosition = offset;
                 t_cell.GridCoord = new Vector2(x, y);
                 
                 _cells[t_cell.GridCoord] = t_cell;
             }
+        }
+
+        switch (_gridDirection)
+        {
+            case GridDirection.xz:
+                break;
+            case GridDirection.xy:
+                this.transform.Rotate(Vector3.right, -90);
+                break;
+            case GridDirection.yz:
+                this.transform.Rotate(Vector3.forward, 90);
+                this.transform.Rotate(Vector3.up, 90);
+                break;
+            
         }
     }
 
@@ -73,6 +92,8 @@ public class ProceduralGridController : MonoBehaviour
     [ContextMenu("Clear Grid")]
     private void ClearGrid()
     {
+        this.transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
+
         for (int i = transform.childCount - 1; i >= 0; i--)
         {
             #if UNITY_EDITOR
