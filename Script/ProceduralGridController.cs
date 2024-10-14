@@ -145,7 +145,6 @@ public class ProceduralGridController : MonoBehaviour
     /// <param name="p1">end point</param>
     /// <param name="points">list of points from start to finish along the line inc. p0 and p1</param>
     public void DrawLine(Vector2 p0, Vector2 p1, ref List<Vector2> points) {
-        
         points.Clear();
         
         Vector2 p;
@@ -160,5 +159,54 @@ public class ProceduralGridController : MonoBehaviour
             p = new Vector2(Mathf.Round(x), Mathf.Round(y));
             points.Add(p);
         }
+    }
+
+    public void DrawCircleFromIntersect(Vector2 Centre, int radius, ref List<Vector2> points)
+    {
+        int r = radius;
+        int SquaresRight = r ;
+        int SquaresLeft = r ;
+        int SquaresUp = r;
+        int SquaresDown = r;
+
+        // We count from 0 so drop 1
+        r -= 1;
+        SquaresRight -= 1;
+        SquaresUp -= 1;
+        
+        Vector2 OffsetCorrection = Vector2.zero;
+            
+        for (int i = 0; i < 4; i++)
+        {
+            if (i == 0)
+                OffsetCorrection = new Vector2(1, 1);
+            if (i == 1)
+                OffsetCorrection = new Vector2(0, 1);
+            if (i == 2)
+                OffsetCorrection = new Vector2(1, 0);
+            if (i == 3)
+                OffsetCorrection = new Vector2(0, 0);
+                
+            // Here we're essentially checking a square of radius {radius} and seeing if the cell is within a circle from point
+            for (int y = (int)Centre.y - SquaresDown; y <= (int)Centre.y + SquaresUp; y++)
+            {
+                for (int x = (int)Centre.x - SquaresLeft; x <= (int)Centre.x + SquaresRight; x++)
+                {
+                    Vector2 pin = new Vector2(x, y);
+                    if (inside_circle(Centre - OffsetCorrection, pin, r))
+                    {
+                        points.Add(pin);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Useful method to check if a tile is within a given circle radius of given point
+    bool inside_circle(Vector2 center, Vector2 tile, float radius) {
+        float dx = center.x - tile.x,
+            dy = center.y - tile.y;
+        float distance_squared = dx*dx + dy*dy;
+        return distance_squared <= radius*radius;
     }
 }
