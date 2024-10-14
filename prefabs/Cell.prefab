@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2481073954792073179}
   - component: {fileID: 269627848536750301}
   - component: {fileID: 2484990861446155524}
-  m_Layer: 8
+  m_Layer: 30
   m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,6 +63,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -139,7 +140,7 @@ GameObject:
   - component: {fileID: 5669057591847317318}
   - component: {fileID: 8734255402400586887}
   - component: {fileID: 528947166852504918}
-  m_Layer: 1
+  m_Layer: 30
   m_Name: Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,6 +189,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
