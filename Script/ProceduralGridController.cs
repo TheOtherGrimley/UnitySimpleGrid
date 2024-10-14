@@ -169,13 +169,14 @@ public class ProceduralGridController : MonoBehaviour
         int SquaresUp = r;
         int SquaresDown = r;
 
-        // We count from 0 so drop 1
+        // We count from 0 so drop 1 on right and up
         r -= 1;
         SquaresRight -= 1;
         SquaresUp -= 1;
         
         Vector2 OffsetCorrection = Vector2.zero;
             
+        // Currently the best way to draw from intersect is to check 4 times in a circle
         for (int i = 0; i < 4; i++)
         {
             if (i == 0)
@@ -200,6 +201,26 @@ public class ProceduralGridController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void DrawCircleFromCell(Vector2 Centre, int radius, ref List<Vector2> points)
+    {
+        // This will exclude the centre point from the radius calculation so you'll always select the centre point
+        int r = radius;
+        
+        // Here we're essentially checking a square of radius {radius} and seeing if the cell is within a circle from point
+        for (int y = (int)Centre.y - radius; y <= (int)Centre.y + radius; y++)
+        {
+            for (int x = (int)Centre.x - radius; x <= (int)Centre.x + radius; x++)
+            {
+                Vector2 pin = new Vector2(x, y);
+                if (inside_circle(Centre, pin, r))
+                {
+                    points.Add(pin);
+                }
+            }
+        }
+        
     }
     
     // Useful method to check if a tile is within a given circle radius of given point
