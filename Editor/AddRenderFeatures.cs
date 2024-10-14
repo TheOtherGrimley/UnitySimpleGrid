@@ -20,7 +20,31 @@ public class SetupRenderFeatures
     static void Setup()
     {
         addRendererFeature<RenderObjects>();
+        
+        
     }
+
+    static void CreateLayers()
+    {
+        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+
+        SerializedProperty it = tagManager.GetIterator();
+        bool showChildren = true;
+        while (it.NextVisible(showChildren))
+        {
+            //set your tags here
+            if (it.name == "User Layer 29")
+            {
+                it.stringValue = "Grid Lines";
+            }
+            if (it.name == "User Layer 30")
+            {
+                it.stringValue = "Grid Cells";
+            }
+        }
+        tagManager.ApplyModifiedProperties();
+    }
+    
 
     static void addRendererFeature<T>() where T : ScriptableRendererFeature
     {
